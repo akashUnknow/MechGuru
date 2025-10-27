@@ -44,6 +44,7 @@ const Home = ({ designConcepts }) => {
             <button className="mt-4 text-orange-600 font-semibold flex items-center gap-1 group-hover:gap-3 transition-all">
               Explore <ChevronRight className="w-5 h-5" />
             </button>
+          
           </div>
         ))}
       </div>

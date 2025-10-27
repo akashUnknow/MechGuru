@@ -1,4 +1,3 @@
-// File: src/components/calculators/ShaftCalculator.jsx
 import React, { useState } from 'react';
 
 const ShaftCalculator = () => {
