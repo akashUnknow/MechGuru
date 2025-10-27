@@ -1,12 +1,16 @@
 // File: src/components/ConceptDetail.jsx
 import React from 'react';
 import { Book, Calculator, CheckCircle } from 'lucide-react';
+import Navbar from './Navbar';
 
 const ConceptDetail = ({ conceptId, designConcepts, setActiveSection, setActiveCalculator }) => {
   const concept = designConcepts.find(c => c.id === conceptId);
   
   return (
-    <div className="space-y-6">
+    <>
+    <Navbar/> 
+    <div className="space-y-6 px-10 mt-5">
+      
       <button 
         onClick={() => setActiveSection('home')}
         className="text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-2"
@@ -46,6 +50,7 @@ const ConceptDetail = ({ conceptId, designConcepts, setActiveSection, setActiveC
         </button>
       </div>
     </div>
+    </>
   );
 };
 

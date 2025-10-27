@@ -1,16 +1,14 @@
-// File: src/components/Home.jsx
-import React from 'react';
 import { CheckCircle, ChevronRight } from 'lucide-react';
+import Navbar from './Navbar';
 
 const Home = ({ designConcepts, setActiveSection }) => {
   return (
-    <div className="space-y-6">
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-8 rounded-lg">
-        <h1 className="text-3xl font-bold mb-2">Machine Design Portal</h1>
-        <p className="text-blue-100">Master mechanical design concepts with interactive tools and calculators</p>
+    <div className="">
+      <div className="">
+        <Navbar/>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-2 gap-6 mt-5 px-10">
         {designConcepts.map(concept => (
           <div 
             key={concept.id}
