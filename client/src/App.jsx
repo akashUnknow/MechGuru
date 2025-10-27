@@ -1,41 +1,25 @@
 // File: src/App.jsx
-import React, { useState } from 'react';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
 import Home from './components/Home';
 import ConceptDetail from './components/ConceptDetail';
 import CalculatorView from './components/CalculatorView';
+import Login from './components/Login';
+import GetStarted from './components/GetStarted';
 import { designConcepts } from './data/designConcepts';
 
 const App = () => {
-  const [activeSection, setActiveSection] = useState('home');
-  const [activeCalculator, setActiveCalculator] = useState(null);
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="">
-        {activeSection === 'home' && (
-          <Home 
-            designConcepts={designConcepts}
-            setActiveSection={setActiveSection}
-          />
-        )}
-        
-        {activeSection !== 'home' && !activeCalculator && (
-          <ConceptDetail 
-            conceptId={activeSection}
-            designConcepts={designConcepts}
-            setActiveSection={setActiveSection}
-            setActiveCalculator={setActiveCalculator}
-          />
-        )}
-        
-        {activeCalculator && (
-          <CalculatorView 
-            calculatorType={activeCalculator}
-            setActiveCalculator={setActiveCalculator}
-          />
-        )}
-      </div>
-    </div>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home designConcepts={designConcepts} />} />
+        <Route path="concept/:conceptId" element={<ConceptDetail designConcepts={designConcepts} />} />
+        <Route path="calculator/:calculatorType" element={<CalculatorView />} />
+        <Route path="login" element={<Login />} />
+        <Route path="getStarted" element={<GetStarted />} />
+      </Route>
+    </Routes>
   );
 };
 

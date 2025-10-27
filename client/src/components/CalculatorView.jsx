@@ -1,11 +1,15 @@
 // File: src/components/CalculatorView.jsx
 import React from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import ShaftCalculator from './calculators/ShaftCalculator';
 import BeltCalculator from './calculators/BeltCalculator';
 import GearCalculator from './calculators/GearCalculator';
 import BearingCalculator from './calculators/BearingCalculator';
 
-const CalculatorView = ({ calculatorType, setActiveCalculator }) => {
+const CalculatorView = () => {
+  const { calculatorType } = useParams();
+  const navigate = useNavigate();
+
   const renderCalculator = () => {
     switch(calculatorType) {
       case 'shafts':
@@ -17,15 +21,16 @@ const CalculatorView = ({ calculatorType, setActiveCalculator }) => {
       case 'bearings':
         return <BearingCalculator />;
       default:
-        return null;
+        return <div>Calculator not found</div>;
     }
   };
 
   return (
     <div className="space-y-4">
       <button 
-        onClick={() => setActiveCalculator(null)}
-        className="text-blue-600 hover:text-blue-800 font-semibold"
+        onClick={() => navigate(`/concept/${calculatorType}`)}
+        className="text-orange-600 hover:text-orange-700 font-semibold flex items-center gap-2 
+          hover:gap-3 transition-all bg-white px-4 py-2 rounded-lg shadow-md"
       >
         ← Back to Concepts
       </button>

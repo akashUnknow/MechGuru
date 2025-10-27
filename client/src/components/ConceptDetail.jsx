@@ -1,56 +1,65 @@
 // File: src/components/ConceptDetail.jsx
 import React from 'react';
 import { Book, Calculator, CheckCircle } from 'lucide-react';
-import Navbar from './Navbar';
+import { useParams, useNavigate } from 'react-router-dom';
 
-const ConceptDetail = ({ conceptId, designConcepts, setActiveSection, setActiveCalculator }) => {
+const ConceptDetail = ({ designConcepts }) => {
+  const { conceptId } = useParams();
+  const navigate = useNavigate();
   const concept = designConcepts.find(c => c.id === conceptId);
   
+  if (!concept) {
+    return <div>Concept not found</div>;
+  }
+
   return (
-    <>
-    <Navbar/> 
-    <div className="space-y-6 px-10 mt-5">
-      
+    <div className="space-y-6">
       <button 
-        onClick={() => setActiveSection('home')}
-        className="text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-2"
+        onClick={() => navigate('/')}
+        className="text-orange-600 hover:text-orange-700 font-semibold flex items-center gap-2 
+          hover:gap-3 transition-all bg-white px-4 py-2 rounded-lg shadow-md"
       >
         ← Back to Home
       </button>
 
-      <div className="bg-white border-2 border-gray-200 rounded-lg p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="bg-blue-100 p-3 rounded-lg text-blue-600">
+      <div className="bg-white/90 backdrop-blur border-2 border-slate-200 rounded-xl p-8 shadow-xl">
+        <div className="flex items-center gap-4 mb-6">
+          <div className="bg-gradient-to-br from-blue-100 to-orange-100 p-4 rounded-xl text-blue-700">
             {concept.icon}
           </div>
-          <h2 className="text-2xl font-bold text-gray-800">{concept.title}</h2>
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-blue-900 bg-clip-text text-transparent">
+            {concept.title}
+          </h2>
         </div>
 
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-            <Book className="w-5 h-5 text-blue-600" />
+        <div className="mb-8">
+          <h3 className="text-xl font-semibold mb-4 flex items-center gap-2 text-slate-800">
+            <Book className="w-6 h-6 text-orange-500" />
             Key Concepts
           </h3>
-          <div className="grid md:grid-cols-2 gap-3">
+          <div className="grid md:grid-cols-2 gap-4">
             {concept.concepts.map((item, idx) => (
-              <div key={idx} className="flex items-start gap-2 bg-gray-50 p-3 rounded">
-                <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                <span className="text-gray-700">{item}</span>
+              <div key={idx} className="flex items-start gap-3 bg-gradient-to-br from-slate-50 to-blue-50 p-4 rounded-lg 
+                border border-slate-200 hover:border-orange-300 transition-colors">
+                <CheckCircle className="w-6 h-6 text-green-500 mt-0.5 flex-shrink-0" />
+                <span className="text-slate-700 font-medium">{item}</span>
               </div>
             ))}
           </div>
         </div>
 
         <button
-          onClick={() => setActiveCalculator(conceptId)}
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition flex items-center gap-2"
+          onClick={() => navigate(`/calculator/${conceptId}`)}
+          className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-xl 
+            font-semibold hover:from-orange-600 hover:to-orange-700 
+            hover:scale-105 hover:shadow-2xl
+            transition-all duration-300 flex items-center gap-3 border border-orange-400/30"
         >
-          <Calculator className="w-5 h-5" />
+          <Calculator className="w-6 h-6" />
           Open Calculator
         </button>
       </div>
     </div>
-    </>
   );
 };
 
