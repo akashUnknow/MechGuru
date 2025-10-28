@@ -1,10 +1,12 @@
 // File: src/components/CalculatorView.jsx
+
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ShaftCalculator from './calculators/ShaftCalculator';
 import BeltCalculator from './calculators/BeltCalculator';
 import GearCalculator from './calculators/GearCalculator';
 import BearingCalculator from './calculators/BearingCalculator';
+import BrakeCalculator from './calculators/BrakeCalculator';
 
 const CalculatorView = () => {
   const { calculatorType } = useParams();
@@ -20,6 +22,8 @@ const CalculatorView = () => {
         return <GearCalculator />;
       case 'bearings':
         return <BearingCalculator />;
+      case 'brakes':
+        return <BrakeCalculator />;
       default:
         return <div>Calculator not found</div>;
     }

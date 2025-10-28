@@ -1,6 +1,6 @@
 // File: src/data/designConcepts.js
 import React from 'react';
-import { Cog, Layers, Settings, Wrench } from 'lucide-react';
+import { Cog, Layers, Settings, Wrench ,Disc} from 'lucide-react';
 
 export const designConcepts = [
   {
@@ -14,6 +14,19 @@ export const designConcepts = [
       'Shaft material selection',
       'Key and keyway design',
       'Critical speed analysis'
+    ]
+  },
+   {
+    id: 'brakes',
+    title: 'Brake Analysis',
+    icon: <Disc className="w-6 h-6" />,
+    concepts: [
+      'Energy absorbed during braking',
+      'Braking torque and power calculation',
+      'Thermal analysis of brake drum/disc',
+      'Coefficient of friction and material selection',
+      'Actuating force and pedal ratio',
+      'Design of band, shoe, and disc brakes'
     ]
   },
   {

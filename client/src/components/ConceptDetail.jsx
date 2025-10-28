@@ -1,5 +1,5 @@
 // File: src/components/ConceptDetail.jsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Book, Calculator, CheckCircle } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -9,8 +9,13 @@ const ConceptDetail = ({ designConcepts }) => {
   const concept = designConcepts.find(c => c.id === conceptId);
   
   if (!concept) {
+
     return <div>Concept not found</div>;
   }
+  useEffect(() => {
+    console.log('Concept ID:', conceptId);
+    window.scrollTo(0, 0);
+  }, [conceptId]);
 
   return (
     <div className="space-y-6">
