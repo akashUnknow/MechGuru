@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ShoeBrakeDesign from '../2dModels/ShoeBrakeDesign';
 
 const BrakeCalculator = () => {
   const [inputs, setInputs] = useState({
@@ -63,16 +64,16 @@ const BrakeCalculator = () => {
       T = (mu * F * L * r) / a;
       console.log("horizontal");
     } else if (type === "down" && drumRotation === "clockwise") {
-      console.log("down" ,"clockwise"); 
+      console.log("down", "clockwise");
       T = (mu * F * L * r) / (a + mu * b);
     } else if (type === "down" && drumRotation === "counter-clockwise") {
-      console.log("down" ,"counter-clockwise");
+      console.log("down", "counter-clockwise");
       T = (mu * F * L * r) / (a - mu * b);
     } else if (type === "above" && drumRotation === "clockwise") {
-      console.log("above" ,"clockwise");
+      console.log("above", "clockwise");
       T = (mu * F * L * r) / (a - mu * b);
     } else if (type === "above" && drumRotation === "counter-clockwise") {
-      console.log("above" ,"counter-clockwise");
+      console.log("above", "counter-clockwise");
       T = (mu * F * L * r) / (a + mu * b);
     } else {
       alert("Invalid configuration!");
@@ -275,23 +276,27 @@ const BrakeCalculator = () => {
         {result && (
           <div className="mt-6 bg-slate-100 rounded-lg p-4 border border-slate-300">
             <h3 className="text-lg font-bold text-slate-700 mb-2">Results:</h3>
-            <p><b>Braking Torque:</b> {result.torque} N·m</p>
+            <p><b>Braking Torque:</b> {result.torque} N·mm</p>
             <p><b>Power Absorbed:</b> {result.powerAbsorbed}</p>
           </div>
         )}
       </div>
 
       {/* RIGHT SIDE — Explanation */}
-      <div className="w-full lg:w-1/2 flex flex-col items-center justify-center bg-slate-50 rounded-lg p-6 shadow-inner">
-        <h2 className="text-xl font-bold mb-3 text-slate-700">
-          Brake Formula Reference
-        </h2>
-        <div className="text-slate-600 text-sm space-y-2">
+      <div className="w-full lg:w-1/2 flex flex-col items-center justify-center bg-slate-50 rounded-lg p-4 shadow-inner">
+        <div className="w-full flex justify-center items-center bg-white border border-slate-200 rounded-xl overflow-hidden p-2">
+          <div className="w-full max-w-[500px] h-[500px] flex justify-center items-center">
+            <ShoeBrakeDesign />
+          </div>
+        </div>
+
+        <div className="mt-4 text-slate-600 text-sm space-y-2 text-center">
+          <p className="font-medium text-slate-700">🧮 Torque & Power Formulas</p>
           <p>Torque (T) = μ × F × r × n</p>
-          <ul className="list-disc list-inside">
+          <ul className="list-disc list-inside text-left mx-auto w-fit">
             <li>μ = Coefficient of friction</li>
-            <li>F = Actuating force per pad (N)</li>
-            <li>r = Mean radius (m)</li>
+            <li>F = Actuating force (N)</li>
+            <li>r = Mean radius (mm)</li>
             <li>n = Number of friction surfaces</li>
           </ul>
           <p>Power Absorbed (kW) = (T × 2πN / 60) / 1000</p>
