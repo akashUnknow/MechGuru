@@ -91,7 +91,9 @@ const BrakeCalculator = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 p-8 bg-white/90 backdrop-blur rounded-xl border-2 border-slate-200 shadow-xl">
+    <div className="flex flex-col lg:flex-row gap-2 bg-transparent
+  border-none rounded-2xl p-1 sm:p-3 md:p-2 shadow-none
+  w-full max-w-7xl mx-auto">
       {/* LEFT SIDE — Inputs */}
       <div className="w-full lg:w-1/2 space-y-6">
         <h2 className="text-2xl font-bold text-slate-700 mb-4">
