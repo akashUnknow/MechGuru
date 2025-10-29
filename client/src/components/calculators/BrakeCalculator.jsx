@@ -61,13 +61,18 @@ const BrakeCalculator = () => {
     // Calculate torque based on type and rotation
     if (type === "horizontal") {
       T = (mu * F * L * r) / a;
+      console.log("horizontal");
     } else if (type === "down" && drumRotation === "clockwise") {
+      console.log("down" ,"clockwise"); 
       T = (mu * F * L * r) / (a + mu * b);
     } else if (type === "down" && drumRotation === "counter-clockwise") {
+      console.log("down" ,"counter-clockwise");
       T = (mu * F * L * r) / (a - mu * b);
     } else if (type === "above" && drumRotation === "clockwise") {
+      console.log("above" ,"clockwise");
       T = (mu * F * L * r) / (a - mu * b);
     } else if (type === "above" && drumRotation === "counter-clockwise") {
+      console.log("above" ,"counter-clockwise");
       T = (mu * F * L * r) / (a + mu * b);
     } else {
       alert("Invalid configuration!");
@@ -118,7 +123,7 @@ const BrakeCalculator = () => {
           <>
             <div>
               <label className="block text-sm font-semibold mb-2 text-slate-700">
-                Fulcrum Position
+                Drum Position
               </label>
               <select
                 value={inputs.shoeBrakeType}
