@@ -87,10 +87,11 @@ const BrakeCalculator = () => {
           >
             <option value="disc">Disc Brake</option>
             <option value="shoe">Shoe Brake</option>
-            <option value="drum">Drum Brake</option>
-            <option value="band">Band Brake</option>
+      
+           
           </select>
         </div>
+        
 
         {/* Shoe Brake Inputs */}
         {inputs.brakeType === "shoe" && (
