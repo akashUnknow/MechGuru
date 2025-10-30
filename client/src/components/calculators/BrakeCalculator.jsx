@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import ShoeBrakeDesign from '../2dModels/ShoeBrakeDesign';
+import ShoeBrakeDesign from "../2dModels/ShoeBrakeDiagram";
+import shoeImage from "../images/shoeimage.png";
 
 const BrakeCalculator = () => {
   const [inputs, setInputs] = useState({
@@ -8,263 +9,141 @@ const BrakeCalculator = () => {
     shoeBrakeType: "horizontal",
     coefficientOfFriction: "",
     forceAppliedAtLeverEnd: "",
-    angleOfContact: "",
     distanceToFulcrum: "",
     actuatingForce: "",
     numberOfSurfaces: 2,
-    stoppingTime: "",
     drumDiameter: "",
     lengthBetweenFulcrumAndDrum: "",
     lengthBetweenFulcrumAndBrakingForce: "",
     drumRotation: "clockwise",
   });
 
+  const [isBraking, setIsBraking] = useState(false);
   const [result, setResult] = useState(null);
 
-  // --- DISC BRAKE FORMULA ---
-  const calculateDiscBrake = () => {
-    const mu = parseFloat(inputs.coefficientOfFriction);
-    const F = parseFloat(inputs.actuatingForce);
-    const r = parseFloat(inputs.leverArmLength);
-    const n = parseFloat(inputs.numberOfSurfaces);
+  const handleChange = (field, value) => setInputs((prev) => ({ ...prev, [field]: value }));
 
-    if (!mu || !F || !r || !n) {
-      alert("Please fill all required fields!");
-      return;
-    }
-
-    const T = mu * F * r * n; // Torque (N·m)
-    setResult({
-      torque: T.toFixed(2),
-      powerAbsorbed: "—",
-    });
-  };
-
-  // --- SHOE BRAKE FORMULA ---
+  // --- SHOE BRAKE CALCULATION ---
   const calculateShoeBrake = () => {
-    // Parse numeric values safely
-    const mu = parseFloat(inputs.coefficientOfFriction);
-    const F = parseFloat(inputs.forceAppliedAtLeverEnd);
-    const L = parseFloat(inputs.leverArmLength);
-    const a = parseFloat(inputs.lengthBetweenFulcrumAndDrum);
-    const b = parseFloat(inputs.lengthBetweenFulcrumAndBrakingForce);
-    const r = parseFloat(inputs.drumDiameter) / 2;
-    const drumRotation = inputs.drumRotation;
-    const type = inputs.shoeBrakeType;
+    const {
+      coefficientOfFriction,
+      forceAppliedAtLeverEnd,
+      leverArmLength,
+      lengthBetweenFulcrumAndDrum,
+      lengthBetweenFulcrumAndBrakingForce,
+      drumDiameter,
+      shoeBrakeType,
+      drumRotation,
+    } = inputs;
 
-    if ([mu, F, L, a, b, r].some((v) => isNaN(v))) {
-      alert("Please fill all required numeric fields!");
-      return;
-    }
+    const mu = parseFloat(coefficientOfFriction);
+    const F = parseFloat(forceAppliedAtLeverEnd);
+    const L = parseFloat(leverArmLength);
+    const a = parseFloat(lengthBetweenFulcrumAndDrum);
+    const b = parseFloat(lengthBetweenFulcrumAndBrakingForce);
+    const r = parseFloat(drumDiameter) / 2;
 
-    let T;
+    if ([mu, F, L, a, b, r].some(isNaN)) return alert("Please fill all numeric fields correctly!");
 
-    // Calculate torque based on type and rotation
-    if (type === "horizontal") {
-      T = (mu * F * L * r) / a;
-      console.log("horizontal");
-    } else if (type === "down" && drumRotation === "clockwise") {
-      console.log("down", "clockwise");
-      T = (mu * F * L * r) / (a + mu * b);
-    } else if (type === "down" && drumRotation === "counter-clockwise") {
-      console.log("down", "counter-clockwise");
-      T = (mu * F * L * r) / (a - mu * b);
-    } else if (type === "above" && drumRotation === "clockwise") {
-      console.log("above", "clockwise");
-      T = (mu * F * L * r) / (a - mu * b);
-    } else if (type === "above" && drumRotation === "counter-clockwise") {
-      console.log("above", "counter-clockwise");
-      T = (mu * F * L * r) / (a + mu * b);
-    } else {
-      alert("Invalid configuration!");
-      return;
-    }
+    let T = 0;
+    const t = shoeBrakeType, rot = drumRotation;
 
-    setResult({
-      torque: T.toFixed(2),
-    });
+    if (t === "horizontal") T = (mu * F * L * r) / a;
+    else if (t === "down" && rot === "clockwise") T = (mu * F * L * r) / (a + mu * b);
+    else if (t === "down" && rot === "counter-clockwise") T = (mu * F * L * r) / (a - mu * b);
+    else if (t === "above" && rot === "clockwise") T = (mu * F * L * r) / (a - mu * b);
+    else if (t === "above" && rot === "counter-clockwise") T = (mu * F * L * r) / (a + mu * b);
+    else return alert("Invalid configuration!");
+
+    setIsBraking(true);  // <-- Trigger brake animation
+    setResult({ torque: T.toFixed(2), powerAbsorbed: "—" });
   };
 
   const handleCalculate = () => {
-    if (inputs.brakeType === "disc") calculateDiscBrake();
-    else if (inputs.brakeType === "shoe") calculateShoeBrake();
-    else alert("This brake type is not yet implemented.");
+    if (inputs.brakeType === "disc") {
+      alert("Disc brake calculation not implemented here.");
+    } else if (inputs.brakeType === "shoe") {
+      calculateShoeBrake();
+    } else {
+      alert("Selected brake type not yet implemented.");
+    }
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2 bg-transparent
-  border-none rounded-2xl p-1 sm:p-3 md:p-2 shadow-none
-  w-full max-w-7xl mx-auto">
+    <div className="flex flex-col lg:flex-row gap-4 bg-transparent rounded-2xl p-3 md:p-6 w-full max-w-7xl mx-auto">
       {/* LEFT SIDE — Inputs */}
-      <div className="w-full lg:w-1/2 space-y-6">
-        <h2 className="text-2xl font-bold text-slate-700 mb-4">
+      <div className="w-full lg:w-1/2 space-y-5">
+        <h2 className="text-2xl md:text-3xl font-bold text-slate-700">
           Brake Analysis Calculator
         </h2>
 
         {/* Brake Type */}
         <div>
-          <label className="block text-sm font-semibold mb-2 text-slate-700">
-            Select Brake Type
-          </label>
+          <label className="block text-sm font-semibold mb-2 text-slate-700">Brake Type</label>
           <select
             value={inputs.brakeType}
-            onChange={(e) =>
-              setInputs({ ...inputs, brakeType: e.target.value })
-            }
-            className="w-full border-2 border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 
-              rounded-lg px-4 py-3 bg-white outline-none transition-all"
+            onChange={(e) => handleChange("brakeType", e.target.value)}
+            className="w-full border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 rounded-lg px-4 py-3 bg-white outline-none transition-all"
           >
             <option value="disc">Disc Brake</option>
+            <option value="shoe">Shoe Brake</option>
             <option value="drum">Drum Brake</option>
             <option value="band">Band Brake</option>
-            <option value="shoe">Shoe Brake</option>
           </select>
         </div>
 
-        {/* Shoe Brake Type */}
+        {/* Shoe Brake Inputs */}
         {inputs.brakeType === "shoe" && (
-          <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold mb-2 text-slate-700">
-                Drum Position
-              </label>
+              <label className="block text-sm font-semibold mb-2 text-slate-700">Drum Position</label>
               <select
                 value={inputs.shoeBrakeType}
-                onChange={(e) =>
-                  setInputs({ ...inputs, shoeBrakeType: e.target.value })
-                }
-                className="w-full border-2 border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 
-                rounded-lg px-4 py-3 bg-white outline-none transition-all"
+                onChange={(e) => handleChange("shoeBrakeType", e.target.value)}
+                className="w-full border border-slate-300 rounded-lg px-4 py-3 bg-white"
               >
                 <option value="horizontal">Horizontal</option>
                 <option value="down">Below Drum</option>
                 <option value="above">Above Drum</option>
               </select>
             </div>
-
-            {/* Drum Rotation */}
             <div>
-              <label className="block text-sm font-semibold mb-2 text-slate-700">
-                Drum Rotation
-              </label>
+              <label className="block text-sm font-semibold mb-2 text-slate-700">Drum Rotation</label>
               <select
                 value={inputs.drumRotation}
-                onChange={(e) =>
-                  setInputs({ ...inputs, drumRotation: e.target.value })
-                }
-                className="w-full border-2 border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 
-                rounded-lg px-4 py-3 bg-white outline-none transition-all"
+                onChange={(e) => handleChange("drumRotation", e.target.value)}
+                className="w-full border border-slate-300 rounded-lg px-4 py-3 bg-white"
               >
                 <option value="clockwise">Clockwise</option>
                 <option value="counter-clockwise">Counter Clockwise</option>
               </select>
             </div>
-          </>
+          </div>
         )}
 
-        {/* Input Fields */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-semibold text-slate-700">
-              Force applied at lever end (N)
-            </label>
-            <input
-              type="number"
-              value={inputs.forceAppliedAtLeverEnd}
-              onChange={(e) =>
-                setInputs({ ...inputs, forceAppliedAtLeverEnd: e.target.value })
-              }
-              placeholder="e.g. 500"
-              className="w-full border-2 border-slate-300 rounded-lg px-4 py-2 outline-none focus:border-orange-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-slate-700">
-              Lever arm length (mm)
-            </label>
-            <input
-              type="number"
-              value={inputs.leverArmLength}
-              onChange={(e) =>
-                setInputs({ ...inputs, leverArmLength: e.target.value })
-              }
-              placeholder="e.g. 120"
-              className="w-full border-2 border-slate-300 rounded-lg px-4 py-2 outline-none focus:border-orange-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-slate-700">
-              Fulcrum to drum center (mm)
-            </label>
-            <input
-              type="number"
-              value={inputs.lengthBetweenFulcrumAndDrum}
-              onChange={(e) =>
-                setInputs({
-                  ...inputs,
-                  lengthBetweenFulcrumAndDrum: e.target.value,
-                })
-              }
-              placeholder="e.g. 350"
-              className="w-full border-2 border-slate-300 rounded-lg px-4 py-2 outline-none focus:border-orange-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-slate-700">
-              Drum diameter (mm)
-            </label>
-            <input
-              type="number"
-              value={inputs.drumDiameter}
-              onChange={(e) =>
-                setInputs({ ...inputs, drumDiameter: e.target.value })
-              }
-              placeholder="e.g. 200"
-              className="w-full border-2 border-slate-300 rounded-lg px-4 py-2 outline-none focus:border-orange-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-slate-700">
-              Coefficient of friction (μ)
-            </label>
-            <input
-              type="number"
-              value={inputs.coefficientOfFriction}
-              onChange={(e) =>
-                setInputs({
-                  ...inputs,
-                  coefficientOfFriction: e.target.value,
-                })
-              }
-              placeholder="e.g. 0.3"
-              className="w-full border-2 border-slate-300 rounded-lg px-4 py-2 outline-none focus:border-orange-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-slate-700">
-              Fulcrum to braking force (mm)
-            </label>
-            <input
-              type="number"
-              value={inputs.lengthBetweenFulcrumAndBrakingForce}
-              onChange={(e) =>
-                setInputs({
-                  ...inputs,
-                  lengthBetweenFulcrumAndBrakingForce: e.target.value,
-                })
-              }
-              placeholder="e.g. 12"
-              className="w-full border-2 border-slate-300 rounded-lg px-4 py-2 outline-none focus:border-orange-500"
-            />
-          </div>
+        {/* Numeric Inputs */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[
+            ["Force applied at lever end (N)", "forceAppliedAtLeverEnd"],
+            ["Lever arm length (mm)", "leverArmLength"],
+            ["Fulcrum to drum center (mm)", "lengthBetweenFulcrumAndDrum"],
+            ["Drum diameter (mm)", "drumDiameter"],
+            ["Coefficient of friction (μ)", "coefficientOfFriction"],
+            ["Fulcrum to braking force (mm)", "lengthBetweenFulcrumAndBrakingForce"],
+          ].map(([label, field]) => (
+            <div key={field}>
+              <label className="block text-sm font-semibold text-slate-700">{label}</label>
+              <input
+                type="number"
+                value={inputs[field]}
+                onChange={(e) => handleChange(field, e.target.value)}
+                className="w-full border border-slate-300 rounded-lg px-4 py-2 outline-none focus:border-orange-500"
+              />
+            </div>
+          ))}
         </div>
 
-        {/* Button */}
+        {/* Calculate Button */}
         <button
           onClick={handleCalculate}
           className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-lg transition-all"
@@ -274,32 +153,36 @@ const BrakeCalculator = () => {
 
         {/* Results */}
         {result && (
-          <div className="mt-6 bg-slate-100 rounded-lg p-4 border border-slate-300">
+          <div className="mt-4 bg-slate-100 rounded-lg p-4 border border-slate-300">
             <h3 className="text-lg font-bold text-slate-700 mb-2">Results:</h3>
             <p><b>Braking Torque:</b> {result.torque} N·mm</p>
-            <p><b>Power Absorbed:</b> {result.powerAbsorbed}</p>
           </div>
         )}
       </div>
 
-      {/* RIGHT SIDE — Explanation */}
-      <div className="w-full lg:w-1/2 flex flex-col items-center justify-center bg-slate-50 rounded-lg p-4 shadow-inner">
-        <div className="w-full flex justify-center items-center bg-white border border-slate-200 rounded-xl overflow-hidden p-2">
-          <div className="w-full max-w-[500px] h-[500px] flex justify-center items-center">
-            <ShoeBrakeDesign />
-          </div>
-        </div>
+      {/* RIGHT SIDE — Visualization */}
+      <div className="w-full lg:w-1/2 flex flex-col items-center justify-start bg-slate-100 rounded-xl shadow-inner p-4">
+        <ShoeBrakeDesign
+          appliedForce={inputs.forceAppliedAtLeverEnd}
+          leverLength={inputs.leverArmLength}
+          leverHeight={inputs.lengthBetweenFulcrumAndDrum}
+          showLength={true}
+          showHeight={true}
+          actualDrumDiameter={inputs.drumDiameter}
+          isBraking={isBraking}
+          setIsBraking={setIsBraking} // pass setter to child
+          drumRotation={inputs.drumRotation}
+        />
 
-        <div className="mt-4 text-slate-600 text-sm space-y-2 text-center">
-          <p className="font-medium text-slate-700">🧮 Torque & Power Formulas</p>
-          <p>Torque (T) = μ × F × r × n</p>
-          <ul className="list-disc list-inside text-left mx-auto w-fit">
-            <li>μ = Coefficient of friction</li>
-            <li>F = Actuating force (N)</li>
-            <li>r = Mean radius (mm)</li>
-            <li>n = Number of friction surfaces</li>
-          </ul>
-          <p>Power Absorbed (kW) = (T × 2πN / 60) / 1000</p>
+        <div className="mt-4 text-center">
+          <img
+            src={shoeImage}
+            alt="Shoe Brake Reference"
+            className="rounded-lg shadow-md w-[250px] sm:w-[320px] md:w-[400px] lg:w-[420px] h-auto object-contain"
+          />
+          <p className="mt-2 text-xs md:text-sm text-slate-500">
+            Reference illustration of shoe brake geometry
+          </p>
         </div>
       </div>
     </div>
