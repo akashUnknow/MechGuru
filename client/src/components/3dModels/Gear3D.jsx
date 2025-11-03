@@ -9,7 +9,7 @@ function GearModel() {
 
 export default function Gear3D() {
   return (
-    <div className="w-full h-[600px]">
+    <div className="w-full h-full">
       <Canvas camera={{ position: [3, 2, 6], fov: 45 }}>
         {/* ✅ Soft background color */}
         <color attach="background" args={["#787878"]} />
