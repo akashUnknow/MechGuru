@@ -17,7 +17,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md bg-white/90 backdrop-blur-md border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-2xl transform transition-all">
         <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 text-center bg-gradient-to-r from-slate-800 to-blue-900 bg-clip-text text-transparent">
           Login to <span className="text-orange-500">MechGuru</span>
